@@ -8,12 +8,12 @@ export const actionTypes = {
   Logout: "[Logout] Action",
   Register: "[Register] Action",
   UserRequested: "[Request User] Action",
-  UserLoaded: "[Load User] Auth API"
+  UserLoaded: "[Load User] Auth API",
 };
 
 const initialAuthState = {
   user: undefined,
-  authToken: undefined
+  authToken: undefined,
 };
 
 export const reducer = persistReducer(
@@ -28,13 +28,18 @@ export const reducer = persistReducer(
 
       case actionTypes.Register: {
         const { authToken } = action.payload;
-
+        console.log(authToken);
         return { authToken, user: undefined };
       }
 
       case actionTypes.Logout: {
         // TODO: Change this code. Actions in reducer aren't allowed.
         return initialAuthState;
+      }
+
+      case actionTypes.UserRequested: {
+        const { user } = action.payload;
+        return { ...state, user };
       }
 
       case actionTypes.UserLoaded: {
@@ -49,11 +54,17 @@ export const reducer = persistReducer(
 );
 
 export const actions = {
-  login: authToken => ({ type: actionTypes.Login, payload: { authToken } }),
-  register: authToken => ({ type: actionTypes.Register, payload: { authToken }}),
+  login: (authToken) => ({ type: actionTypes.Login, payload: { authToken } }),
+  register: (authToken) => ({
+    type: actionTypes.Register,
+    payload: { authToken },
+  }),
   logout: () => ({ type: actionTypes.Logout }),
-  requestUser: user => ({ type: actionTypes.UserRequested, payload: { user } }),
-  fulfillUser: user => ({ type: actionTypes.UserLoaded, payload: { user } })
+  requestUser: (user) => ({
+    type: actionTypes.UserRequested,
+    payload: { user },
+  }),
+  fulfillUser: (user) => ({ type: actionTypes.UserLoaded, payload: { user } }),
 };
 
 export function* saga() {
