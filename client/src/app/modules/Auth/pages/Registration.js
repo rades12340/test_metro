@@ -111,9 +111,9 @@ function Registration(props) {
             values.password,
             values.confirmPassword
           )
-            .then(({ data: { accessToken } }) => {
-              console.log(accessToken);
-              props.register(accessToken);
+            .then(({ data }) => {
+              console.log(data);
+              props.requestUser(data);
               disableLoading();
             })
             .catch(() => {
